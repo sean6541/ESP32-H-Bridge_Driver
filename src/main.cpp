@@ -28,7 +28,7 @@ static void update() {
   } else {
     mcpwm_set_frequency(MCPWM_UNIT_0, MCPWM_TIMER_0, freq * 2);
     f_duty = duty * 50.0 / 1000.0;
-    mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_A, 100 - f_duty);
+    mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_A, 100.0 - f_duty);
     mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_B, f_duty);
   }
 }
@@ -66,7 +66,7 @@ void setup() {
   }
   mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &mcpwm_config);
   if(!single_ended) {
-    mcpwm_set_duty_type(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_B, MCPWM_DUTY_MODE_1);
+    mcpwm_set_duty_type(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_A, MCPWM_DUTY_MODE_1);
   }
   update();
 
@@ -78,12 +78,12 @@ void setup() {
     String msg = "Configuration set.";
     if(request->hasParam("freq")) {
       int _freq = request->getParam("freq")->value().toInt();
-      if(_freq > 0 && _freq <= 200000) {
+      if(_freq > 0 && _freq <= 300000) {
         freq = _freq;
         prefs.putInt("freq", freq);
       } else {
         err_code = 400;
-        msg = "Error: Freq " + String(_freq) + " is out of bounds (1-200000 Hertz)";
+        msg = "Error: Freq " + String(_freq) + " is out of bounds (1-300000 Hertz)";
       }
     }
     if(request->hasParam("duty")) {
